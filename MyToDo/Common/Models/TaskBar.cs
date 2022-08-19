@@ -35,7 +35,7 @@ namespace MyToDo.Common.Models
         public string Content
         {
             get { return content; }
-            set { content = value; }
+            set { content = value; RaisePropertyChanged(); }
         } 
 
         private string color;

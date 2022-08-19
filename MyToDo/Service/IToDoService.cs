@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyToDo.Service
 {
-    public interface IToDoService: IBaseService<ToDoDto>
+    public interface IToDoService : IBaseService<ToDoDto>
     {
         Task<ApiResponse<PagedList<ToDoDto>>> GetAllFilterAsync(TodoParameter parameter);
+        Task<ApiResponse<SummaryDto>> SummaryAsync();
     }
 }

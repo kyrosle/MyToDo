@@ -3,7 +3,8 @@ using AutoMapper;
 using MyToDo.Api.Models;
 using MyToDo.Share.Dtos;
 using MyToDo.Share.Parameters;
-using System.Reflection.Metadata;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace MyToDo.Api.Service
 {
@@ -81,7 +82,7 @@ namespace MyToDo.Api.Service
 
                 //! 没加括号符号逻辑错误
                 var result = await repository.GetPagedListAsync(predicate:
-                x => (string.IsNullOrWhiteSpace(parameter.Search) ? true : x.Title.Contains(parameter.Search))                && (parameter.Status == null ? true :  x.Status.Equals(parameter.Status))
+                x => (string.IsNullOrWhiteSpace(parameter.Search) ? true : x.Title.Contains(parameter.Search)) && (parameter.Status == null ? true : x.Status.Equals(parameter.Status))
                 ,
                 pageIndex: parameter.PageIndex,
                     pageSize: parameter.PageSize,
@@ -109,6 +110,59 @@ namespace MyToDo.Api.Service
             catch (Exception e)
             {
                 return new ApiResponse(e.Message);
+            }
+        }
+
+        public async Task<ApiResponse> SummaryAsync()
+        {
+            try
+            {
+                // 待办事项结果
+                var todos = await unitOfWork.GetRepository<ToDo>().GetPagedListAsync(
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate),
+                    pageIndex: 0,
+                    pageSize: 100);
+                // 备忘录结果
+                var memos = await unitOfWork.GetRepository<Memo>().GetPagedListAsync(
+                    orderBy: source => source.OrderByDescending(t => t.CreateDate),
+                    pageIndex: 0,
+                    pageSize: 100);
+
+                SummaryDto summary = new SummaryDto();
+
+                if (todos.TotalCount > 0)
+                {
+                    var items = todos.Items;
+                    summary.ToDoList = new ObservableCollection<ToDoDto>(mapper.Map<List<ToDoDto>>(
+                        items.Where(i => i.Status.Equals(0))));
+                    summary.Sum = items.Count;
+                    summary.CompletedCount = summary.Sum - summary.ToDoList.Count;
+                    summary.CompleteRatio = ((double)summary.CompletedCount / summary.Sum).ToString("0%");
+                }
+                else
+                {
+                    summary.ToDoList = new ObservableCollection<ToDoDto>();
+                    summary.Sum = 0;
+                    summary.CompletedCount = 0;
+                    summary.CompleteRatio = "0 %";
+                }
+
+                if (memos.TotalCount > 0)
+                {
+                    var items = memos.Items;
+                    summary.MemoList = new ObservableCollection<MemoDto>(mapper.Map<List<MemoDto>>(items));
+                    summary.MemoCount = items.Count();
+                }
+                else
+                {
+                    summary.MemoList = new ObservableCollection<MemoDto>();
+                    summary.MemoCount = 0;
+                }
+                return new ApiResponse(true, summary);
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse(false, "");
             }
         }
 

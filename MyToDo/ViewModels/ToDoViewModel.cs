@@ -39,7 +39,7 @@ namespace MyToDo.ViewModels
         {
             try
             {
-                var dialogResut = await dialogHost.QuestionAsync("Tips",$"Want Delete {obj.Title} ?");
+                var dialogResut = await dialogHost.QuestionAsync("Tips", $"Want Delete {obj.Title} ?");
                 if (dialogResut.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
 
                 UpdateLoading(true);
@@ -223,6 +223,9 @@ namespace MyToDo.ViewModels
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
+            if (navigationContext.Parameters.ContainsKey("Value"))
+                SeletedIndex = navigationContext.Parameters.GetValue<int>("Value");
+            else SeletedIndex = 0;
             GetDataAsync();
         }
     }

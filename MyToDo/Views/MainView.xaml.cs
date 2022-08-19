@@ -69,6 +69,13 @@ namespace MyToDo.Views
                 if (DialogHost.IsOpen)
                     DialogHost.DialogContent = new ProgressView();
             });
+
+            // 注册提示消息
+            aggregator.RegisterMessage(arg =>
+            {
+                SnackBar.MessageQueue.Enqueue(arg);
+            });
+
             this.dialogHost = dialogHost;
         }
     }

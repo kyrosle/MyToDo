@@ -22,6 +22,8 @@ namespace MyToDo.Api.Controllers
         public async Task<ApiResponse> Get(int id) => await toDoService.GetSingleAsync(id);
         [HttpGet]
         public async Task<ApiResponse> GetAll([FromQuery] TodoParameter parameter) => await toDoService.GetAllAsync(parameter);
+        [HttpGet]
+        public async Task<ApiResponse> Summary() => await toDoService.SummaryAsync();
         [HttpPost]
         public async Task<ApiResponse> Add([FromBody] ToDoDto todo) => await toDoService.AddAsync(todo);
         [HttpPost]

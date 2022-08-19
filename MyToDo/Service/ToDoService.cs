@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyToDo.Service
 {
-    public class ToDoService : BaseService<ToDoDto> , IToDoService
+    public class ToDoService : BaseService<ToDoDto>, IToDoService
     {
         private readonly HttpRestClient client;
 
@@ -22,9 +22,17 @@ namespace MyToDo.Service
             request.Method = Method.GET;
             request.Route = $"api/ToDo/GetAll?PageIndex={parameter.PageIndex}" +
                 $"&PageSize={parameter.PageSize}" +
-                $"&search={parameter.Search}"+
+                $"&search={parameter.Search}" +
                 $"&status={parameter.Status}";
             return await client.ExecuteAsync<PagedList<ToDoDto>>(request);
+        }
+
+        public async Task<ApiResponse<SummaryDto>> SummaryAsync()
+        {
+            BaseRequest request = new BaseRequest();
+            request.Method = Method.GET;
+            request.Route = "api/ToDo/Summary";
+            return await client.ExecuteAsync<SummaryDto>(request);
         }
     }
 }

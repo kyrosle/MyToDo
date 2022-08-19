@@ -24,7 +24,7 @@
         <TextBlock
             Margin="15,10"
             FontSize="22"
-            Text="Hi Kyros~" />
+            Text="{Binding Title}" />
 
         <ItemsControl Grid.Row="1" ItemsSource="{Binding TaskBars}">
             <ItemsControl.ItemsPanel>
@@ -38,6 +38,14 @@
                         Margin="10"
                         Background="{Binding Color}"
                         CornerRadius="5">
+
+                        <Border.InputBindings>
+                            <MouseBinding
+                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
+                                MouseAction="LeftClick" />
+                        </Border.InputBindings>
+
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Style.Triggers>
@@ -133,7 +141,7 @@
                 <ListBox
                     x:Name="todoList"
                     HorizontalContentAlignment="Stretch"
-                    ItemsSource="{Binding ToDoDtos}"
+                    ItemsSource="{Binding SummaryDto.ToDoList}"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
@@ -185,7 +193,7 @@
                 </DockPanel>
                 <ListBox
                     x:Name="memoList"
-                    ItemsSource="{Binding MemoDtos}"
+                    ItemsSource="{Binding SummaryDto.MemoList}"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">

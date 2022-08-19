@@ -3,13 +3,7 @@ using MyToDo.Extension;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls.Primitives;
 
 namespace MyToDo.ViewModels
 {
@@ -32,8 +26,6 @@ namespace MyToDo.ViewModels
             // ContentControl 的导航
             regionManager.Regions[PrismManager.SettingViewRegionName].RequestNavigate(obj.NameSpace);
         }
-
-        private IRegionNavigationJournal journal;
 
         public ObservableCollection<MenuBar> MenuBars
         {
