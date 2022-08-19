@@ -25,9 +25,16 @@ namespace MyToDo.Service
                 request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
             restClient.BaseUrl = new Uri(apiUrl + baseRequest.Route);
 
-            IRestResponse response = await restClient.ExecuteAsync(request);
+            var response = await restClient.ExecuteAsync(request);
 
-            return JsonConvert.DeserializeObject<ApiResponse>(response.Content);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ApiResponse>(response.Content);
+            else return new ApiResponse()
+            {
+                Status = false,
+                Result = null,
+                Message = response.ErrorMessage,
+            };
         }
         public async Task<ApiResponse<T>> ExecuteAsync<T>(BaseRequest baseRequest)
         {
@@ -37,8 +44,15 @@ namespace MyToDo.Service
                 request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
             restClient.BaseUrl = new Uri(apiUrl + baseRequest.Route);
 
-            IRestResponse response = await restClient.ExecuteAsync(request);
-            return JsonConvert.DeserializeObject<ApiResponse<T>>(response.Content);
+            var response = await restClient.ExecuteAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return JsonConvert.DeserializeObject<ApiResponse<T>>(response.Content);
+            else return new ApiResponse<T>()
+            {
+                Status = false,
+                Message = response.ErrorMessage,
+            };
         }
     }
 }

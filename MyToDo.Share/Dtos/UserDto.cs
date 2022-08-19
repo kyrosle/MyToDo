@@ -8,9 +8,9 @@ namespace MyToDo.Share.Dtos
 {
     public class UserDto : BaseDto
     {
-        private string userName;
+        private string? userName;
 
-        public string UserName
+        public string? UserName
         {
             get { return userName; }
             set { userName = value; OnPropertyCHanged(); }

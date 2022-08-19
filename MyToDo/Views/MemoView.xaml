@@ -113,7 +113,7 @@
                                         </Grid.RowDefinitions>
                                         <Border
                                             Grid.RowSpan="2"
-                                            Background="Green"
+                                            Background="#2cb371"
                                             CornerRadius="3" />
                                         <md:PopupBox HorizontalAlignment="Right" Panel.ZIndex="1">
                                             <Button

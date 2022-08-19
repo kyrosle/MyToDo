@@ -2,6 +2,7 @@
 using MyToDo.Common.Models;
 using MyToDo.Extension;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -15,7 +16,15 @@ namespace MyToDo.ViewModels
 {
     internal class MainViewModel : BindableBase, IConfigureService
     {
-        public MainViewModel(IRegionManager regionManager)
+        private string userName;
+
+        public string UserName
+        {
+            get { return userName; }
+            set { userName = value; RaisePropertyChanged(); }
+        }
+
+        public MainViewModel(IRegionManager regionManager, IContainerProvider provider)
         {
             MenuBars = new ObservableCollection<MenuBar>();
             NavigateCommand = new DelegateCommand<MenuBar>(Navigate);
@@ -28,6 +37,10 @@ namespace MyToDo.ViewModels
                 if (journal != null && journal.CanGoForward) journal.GoForward();
             });
             this.regionManager = regionManager;
+            LoginOutCommand = new DelegateCommand(() =>
+            {
+                App.LogOut(provider);
+            });
         }
         /// <summary>
         /// 导航命令
@@ -48,6 +61,7 @@ namespace MyToDo.ViewModels
         public DelegateCommand<MenuBar> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand GoForwardCommand { get; private set; }
+        public DelegateCommand LoginOutCommand { get; private set; }
 
         private ObservableCollection<MenuBar> menuBars;
 
@@ -72,6 +86,7 @@ namespace MyToDo.ViewModels
         /// </summary>
         public void Configure()
         {
+            UserName = AppSession.UserName;
             CreateMenuBar();
             regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
         }

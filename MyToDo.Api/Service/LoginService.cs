@@ -2,6 +2,7 @@
 using AutoMapper;
 using MyToDo.Api.Models;
 using MyToDo.Share.Dtos;
+using MyToDo.Share.Extensions;
 
 namespace MyToDo.Api.Service
 {
@@ -19,11 +20,20 @@ namespace MyToDo.Api.Service
         {
             try
             {
+                PassWord = PassWord.GetMD5();
+
                 var model = await unitOfWork.GetRepository<User>().GetFirstOrDefaultAsync(
                     predicate: x => x.Account.Equals(Account) && x.PassWord.Equals(PassWord));
-                if (model is null)
+                if (model == null)
                     return new ApiResponse("Account or PassWord Error");
-                return new ApiResponse(true, model);
+
+                return new ApiResponse(true, new UserDto()
+                {
+                    Account = model.Account,
+                    PassWord = model.PassWord,
+                    UserName = model.UserName,
+                    Id = model.Id
+                });
             }
             catch (Exception e)
             {
@@ -42,10 +52,14 @@ namespace MyToDo.Api.Service
                 if (userModel is not null)
                     return new ApiResponse("Account is Existed");
 
+                model.CreateDate = DateTime.Now;
+                model.PassWord = user.PassWord.GetMD5();
                 await repository.InsertAsync(model);
+
                 if (await unitOfWork.SaveChangesAsync() > 0)
                     return new ApiResponse(true, model);
-                else return new ApiResponse("Insert Account Failed");
+
+                return new ApiResponse("Insert Account Failed");
             }
             catch (Exception e)
             {

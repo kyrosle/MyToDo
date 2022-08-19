@@ -23,7 +23,7 @@ namespace MyToDo.ViewModels
         private readonly IRegionManager regionManager;
         public IndexViewModel(IContainerProvider provider, IDialogHostService dialogService) : base(provider)
         {
-            Title = $"Hello Kyros {DateTime.Now.GetDateTimeFormats('D')[1].ToString()}";
+            Title = $"Hello {AppSession.UserName} {DateTime.Now.GetDateTimeFormats('D')[1].ToString()}";
             EditMemoCommand = new DelegateCommand<MemoDto>(AddMemo);
             EditToDoCommand = new DelegateCommand<ToDoDto>(AddToDo);
             ExcuteCommand = new DelegateCommand<string>(Excute);

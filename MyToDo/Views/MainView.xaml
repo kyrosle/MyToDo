@@ -51,7 +51,7 @@
                             Margin="0,10"
                             HorizontalAlignment="Center"
                             FontSize="40"
-                            Text="Kyros" />
+                            Text="{Binding UserName}" />
                     </StackPanel>
                     <!--  菜单选项  -->
                     <ListBox
@@ -61,7 +61,7 @@
                         <!--  添加触发器  -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding NavigateCommand}" CommandParameter="{Binding ElementName=menuBar, Path=SelectedItem}" />
+                                <i:InvokeCommandAction Command="{Binding NavigateCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <!--  数据模板  -->
@@ -101,6 +101,43 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     Mode="PrimaryMid">
                     <DockPanel LastChildFill="False">
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button
+                                x:Name="btnMin"
+                                Content="—"
+                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                            <Button
+                                x:Name="btnMax"
+                                Content="☐"
+                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                            <Button
+                                x:Name="btnClose"
+                                Content="✕"
+                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        </StackPanel>
+
+                        <materialDesign:PopupBox DockPanel.Dock="Right">
+                            <materialDesign:PopupBox.ToggleContent>
+                                <Image
+                                    Width="30"
+                                    Height="30"
+                                    Source="/Images/user.png">
+                                    <Image.Clip>
+                                        <EllipseGeometry
+                                            Center="12.5, 12.5"
+                                            RadiusX="12.5"
+                                            RadiusY="12.5" />
+                                    </Image.Clip>
+                                </Image>
+                            </materialDesign:PopupBox.ToggleContent>
+                            <StackPanel>
+                                <Button
+                                    Command="{Binding LoginOutCommand}"
+                                    CommandParameter="Center"
+                                    Content="LoginOut" />
+                            </StackPanel>
+                        </materialDesign:PopupBox>
+
                         <StackPanel Orientation="Horizontal">
                             <ToggleButton
                                 x:Name="MenuToggleButton"
@@ -135,31 +172,6 @@
                                 AutomationProperties.Name="Material Design In XAML Toolkit"
                                 FontSize="22"
                                 Text="笔记本" />
-                        </StackPanel>
-                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                            <Image
-                                Width="30"
-                                Height="30"
-                                Source="/Images/user.png">
-                                <Image.Clip>
-                                    <EllipseGeometry
-                                        Center="12.5, 12.5"
-                                        RadiusX="12.5"
-                                        RadiusY="12.5" />
-                                </Image.Clip>
-                            </Image>
-                            <Button
-                                x:Name="btnMin"
-                                Content="—"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            <Button
-                                x:Name="btnMax"
-                                Content="☐"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
-                            <Button
-                                x:Name="btnClose"
-                                Content="✕"
-                                Style="{StaticResource MaterialDesignFlatMidBgButton}" />
                         </StackPanel>
                     </DockPanel>
                 </materialDesign:ColorZone>

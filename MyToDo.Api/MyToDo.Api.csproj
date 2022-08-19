@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -23,6 +23,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyToDo.Share\MyToDo.Share.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="to.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
